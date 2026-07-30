@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import { 
-  MessageSquare, 
-  X, 
-  Send, 
-  Bot, 
-  User, 
+import {
+  MessageSquare,
+  X,
+  Send,
+  Bot,
+  User,
   Minus,
   Sparkles
 } from "lucide-react";
@@ -80,7 +80,7 @@ export default function App({ projectId, apiUrl = "http://localhost:3001" }: App
       // Setup initial welcome greeting
       const welcomeMsg: Message = {
         role: "assistant",
-        content: "Hi 👋 Ask me anything about our documents!"
+        content: "Hi 👋I am here to Help..!"
       };
       setMessages([welcomeMsg]);
       localStorage.setItem(`kw_messages_${projectId}`, JSON.stringify([welcomeMsg]));
@@ -108,7 +108,7 @@ export default function App({ projectId, apiUrl = "http://localhost:3001" }: App
 
     // Placeholder for stream text construction
     let streamedResponse = "";
-    
+
     // Add placeholder assistant message
     setMessages(prev => [...prev, { role: "assistant", content: "" }]);
 
@@ -139,7 +139,7 @@ export default function App({ projectId, apiUrl = "http://localhost:3001" }: App
         done = doneReading;
         if (value) {
           buffer += decoder.decode(value, { stream: !done });
-          
+
           // Split buffer by SSE newline frames
           const parts = buffer.split("\n\n");
           // Keep the last partial line in the buffer
@@ -152,7 +152,7 @@ export default function App({ projectId, apiUrl = "http://localhost:3001" }: App
             const jsonStr = trimmed.substring(6);
             try {
               const parsed = JSON.parse(jsonStr);
-              
+
               if (parsed.error) {
                 throw new Error(parsed.error);
               }
@@ -191,7 +191,7 @@ export default function App({ projectId, apiUrl = "http://localhost:3001" }: App
                   localStorage.setItem(`kw_messages_${projectId}`, JSON.stringify(copy));
                   return copy;
                 });
-                
+
                 setIsTyping(false);
               }
             } catch (err) {
@@ -219,7 +219,7 @@ export default function App({ projectId, apiUrl = "http://localhost:3001" }: App
     if (confirm("Reset chat history?")) {
       const welcomeMsg: Message = {
         role: "assistant",
-        content: `Hi 👋 Ask me anything about our documents!`
+        content: `Hi 👋I am here to Help..!`
       };
       setMessages([welcomeMsg]);
       setConversationId(null);
@@ -233,7 +233,7 @@ export default function App({ projectId, apiUrl = "http://localhost:3001" }: App
       {/* 1. Expandable Chat Window */}
       {isOpen && (
         <div className="flex flex-col w-[370px] h-[520px] bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden mb-4 transition-all duration-300 transform scale-100 origin-bottom-right">
-          
+
           {/* Header bar */}
           <div className="bg-indigo-600 px-5 py-4 text-white flex items-center justify-between shadow-sm select-none">
             <div className="flex items-center gap-2.5">
@@ -249,14 +249,14 @@ export default function App({ projectId, apiUrl = "http://localhost:3001" }: App
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <button 
+              <button
                 onClick={clearHistory}
                 title="Reset Chat"
                 className="p-1.5 hover:bg-indigo-500 rounded-lg text-indigo-100 hover:text-white transition-colors"
               >
                 <Minus className="h-4 w-4" />
               </button>
-              <button 
+              <button
                 onClick={() => setIsOpen(false)}
                 className="p-1.5 hover:bg-indigo-500 rounded-lg text-indigo-100 hover:text-white transition-colors"
               >
@@ -268,25 +268,22 @@ export default function App({ projectId, apiUrl = "http://localhost:3001" }: App
           {/* Messages area */}
           <div className="flex-1 p-4 bg-slate-50 overflow-y-auto space-y-3 scrollbar-thin">
             {messages.map((msg, index) => (
-              <div 
-                key={index} 
-                className={`flex gap-2 max-w-[85%] ${
-                  msg.role === "user" ? "ml-auto flex-row-reverse" : "mr-auto"
-                }`}
+              <div
+                key={index}
+                className={`flex gap-2 max-w-[85%] ${msg.role === "user" ? "ml-auto flex-row-reverse" : "mr-auto"
+                  }`}
               >
-                <div className={`flex h-7 w-7 items-center justify-center rounded-full flex-shrink-0 text-xs font-semibold select-none ${
-                  msg.role === "user" 
-                    ? "bg-slate-800 text-white" 
-                    : "bg-indigo-600 text-white"
-                }`}>
+                <div className={`flex h-7 w-7 items-center justify-center rounded-full flex-shrink-0 text-xs font-semibold select-none ${msg.role === "user"
+                  ? "bg-slate-800 text-white"
+                  : "bg-indigo-600 text-white"
+                  }`}>
                   {msg.role === "user" ? <User className="h-3.5 w-3.5" /> : <Bot className="h-3.5 w-3.5" />}
                 </div>
                 <div className="space-y-1">
-                  <div className={`rounded-2xl px-3.5 py-2 text-xs leading-relaxed shadow-sm border ${
-                    msg.role === "user"
-                      ? "bg-slate-800 text-white border-slate-700 rounded-tr-none"
-                      : "bg-white text-slate-800 border-slate-200/50 rounded-tl-none"
-                  }`}>
+                  <div className={`rounded-2xl px-3.5 py-2 text-xs leading-relaxed shadow-sm border ${msg.role === "user"
+                    ? "bg-slate-800 text-white border-slate-700 rounded-tr-none"
+                    : "bg-white text-slate-800 border-slate-200/50 rounded-tl-none"
+                    }`}>
                     {msg.content === "" ? (
                       <div className="flex items-center gap-1 text-slate-400 py-0.5">
                         <span className="h-1.5 w-1.5 rounded-full bg-indigo-400 animate-bounce"></span>
@@ -309,7 +306,7 @@ export default function App({ projectId, apiUrl = "http://localhost:3001" }: App
                 </div>
               </div>
             ))}
-            
+
             {/* Custom bot typing indicator */}
             {isTyping && messages[messages.length - 1]?.content !== "" && (
               <div className="flex gap-2 max-w-[80%] mr-auto">
@@ -335,8 +332,8 @@ export default function App({ projectId, apiUrl = "http://localhost:3001" }: App
               className="text-xs h-9 px-3 rounded-lg border border-slate-200 bg-slate-50/50 focus:outline-none focus:ring-1 focus:ring-indigo-600 flex-1"
               disabled={isTyping}
             />
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               disabled={!inputValue.trim() || isTyping}
               className="h-9 w-9 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 text-white rounded-lg flex items-center justify-center transition-colors flex-shrink-0"
             >
@@ -347,14 +344,14 @@ export default function App({ projectId, apiUrl = "http://localhost:3001" }: App
           {/* Branding */}
           <div className="bg-white text-[9px] text-slate-400 text-center py-1.5 border-t border-slate-50 flex items-center justify-center gap-1 select-none flex-shrink-0 font-medium">
             <Sparkles className="h-2.5 w-2.5 text-indigo-500" />
-            Powered by <strong className="text-indigo-600 font-semibold">KnowledgeWidget AI</strong>
+            Powered by <strong className="text-indigo-600 font-semibold">SoumenWidget AI</strong>
           </div>
 
         </div>
       )}
 
       {/* 2. Floating Circular Open Bubble Button */}
-      <button 
+      <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex h-14 w-14 items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 active:scale-95 border border-indigo-500 select-none cursor-pointer"
       >

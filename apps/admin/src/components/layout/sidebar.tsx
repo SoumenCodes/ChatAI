@@ -2,14 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { 
-  LayoutDashboard, 
-  FolderKanban, 
-  FileText, 
-  Settings, 
-  User, 
-  Key, 
-  CreditCard, 
+import {
+  LayoutDashboard,
+  FolderKanban,
+  FileText,
+  Settings,
+  User,
+  Key,
+  CreditCard,
   LogOut,
   Bot
 } from "lucide-react";
@@ -44,7 +44,7 @@ export function Sidebar({ currentProjectId }: SidebarProps) {
           <Bot className="h-5 w-5 text-white" />
         </div>
         <div>
-          <h1 className="font-bold text-sm leading-tight">KnowledgeWidget</h1>
+          <h1 className="font-bold text-sm leading-tight">SoumenWidget</h1>
           <span className="text-[10px] text-slate-400 font-medium">AI PLATFORM</span>
         </div>
       </div>
@@ -64,8 +64,8 @@ export function Sidebar({ currentProjectId }: SidebarProps) {
                   href={item.disabled ? "#" : item.href}
                   className={cn(
                     "group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200",
-                    isActive 
-                      ? "bg-indigo-600 text-white" 
+                    isActive
+                      ? "bg-indigo-600 text-white"
                       : "text-slate-400 hover:bg-slate-800 hover:text-slate-200",
                     item.disabled && "opacity-50 cursor-not-allowed"
                   )}

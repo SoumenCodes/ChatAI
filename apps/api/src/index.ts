@@ -379,6 +379,27 @@ app.post("/chat", async (req, res) => {
       content: message
     });
 
+    // Intercept common greetings to reply instantly without running RAG
+    const cleanMsg = message.toLowerCase().trim().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g,"");
+    const greetings = ["hi", "hello", "hey", "greetings", "good morning", "good afternoon", "good evening", "yo"];
+    if (greetings.includes(cleanMsg)) {
+      const greetingReply = `Hi! How can I help you today?`;
+      const words = greetingReply.split(" ");
+      for (const word of words) {
+        res.write(`data: ${JSON.stringify({ text: word + " " })}\n\n`);
+        await new Promise((r) => setTimeout(r, 60));
+      }
+      
+      await db.insert(messages).values({
+        conversationId: finalConversationId,
+        role: "assistant",
+        content: greetingReply
+      });
+
+      res.write(`data: ${JSON.stringify({ done: true, conversationId: finalConversationId, sources: [] })}\n\n`);
+      return res.end();
+    }
+
     // 5. Handle fallback if similarity threshold not met
     if (matchedChunks.length === 0) {
       const fallback = projectConfig.fallbackMessage;

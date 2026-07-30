@@ -15,7 +15,7 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "KnowledgeWidget AI Dashboard",
+  title: "SoumenWidget AI Dashboard",
   description: "Sleek knowledge management dashboard for custom website AI widgets",
 };
 

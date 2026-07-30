@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CardioCare Clinic - Host Website</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8fafc;
+      color: #1e293b;
+    }
+    header {
+      background-color: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 20px 80px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 20px;
+      font-weight: 700;
+      color: #4f46e5;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: #64748b;
+      margin-left: 30px;
+      font-weight: 500;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover {
+      color: #4f46e5;
+    }
+    .hero {
+      max-width: 800px;
+      margin: 100px auto;
+      text-align: center;
+      padding: 0 20px;
+    }
+    .hero h1 {
+      font-size: 48px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+    .hero p {
+      font-size: 18px;
+      color: #475569;
+      line-height: 1.6;
+      margin-bottom: 40px;
+    }
+    .btn {
+      background-color: #4f46e5;
+      color: white;
+      text-decoration: none;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 16px;
+      box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+      transition: background-color 0.2s;
+    }
+    .btn:hover {
+      background-color: #4338ca;
+    }
+    .features {
+      max-width: 1000px;
+      margin: 0 auto 100px auto;
+      display: grid;
+      grid-template-cols: repeat(3, 1fr);
+      gap: 30px;
+      padding: 0 20px;
+    }
+    .feature-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      padding: 30px;
+      border-radius: 12px;
+    }
+    .feature-card h3 {
+      font-size: 18px;
+      color: #0f172a;
+      margin-bottom: 10px;
+    }
+    .feature-card p {
+      color: #64748b;
+      font-size: 14px;
+      line-height: 1.5;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div className="logo">CardioCare Clinic</div>
+    <div className="nav-links">
+      <a href="#">Home</a>
+      <a href="#">About Us</a>
+      <a href="#">Services</a>
+      <a href="#">Doctors</a>
+      <a href="#">Contact</a>
+    </div>
+  </header>
+
+  <section className="hero">
+    <h1>Compassionate Care for a Healthier Heart</h1>
+    <p>World-class cardiology services with advanced technology and expert doctors. Book an appointment today and prioritize your cardiovascular health.</p>
+    <a href="#" className="btn">Book Appointment</a>
+  </section>
+
+  <section className="features">
+    <div className="feature-card">
+      <h3>Expert Doctors</h3>
+      <p>Consult with our board-certified cardiologists specializing in advanced cardiac treatments.</p>
+    </div>
+    <div className="feature-card">
+      <h3>Advanced Care</h3>
+      <p>State-of-the-art diagnostics and interventional equipment for precise patient analysis.</p>
+    </div>
+    <div className="feature-card">
+      <h3>24/7 Support</h3>
+      <p>Round-the-clock cardiology response and emergency care for all critical cases.</p>
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- KNOWLEDGEWIDGET AI INTEGRATION SNIPPET                 -->
+  <!-- ======================================================== -->
+  
+  <!-- 1. Load the compiled widget script statically from Express -->
+  <script src="http://localhost:3001/widget.js"></script>
+
+  <!-- 2. Initialize the widget with the project ID -->
+  <script>
+    // Initialize the widget.
+    // Replace 'cardiocare-hospital' with your actual generated Project ID from the Admin panel.
+    AIWidget.init({
+      projectId: "test-chat-5833",
+      apiUrl: "http://localhost:3001"
+    });
+  </script>
+
+</body>
+</html>

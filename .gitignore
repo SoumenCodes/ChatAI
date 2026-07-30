@@ -1,0 +1,59 @@
+# Dependency Directories
+node_modules/
+/node_modules
+apps/admin/node_modules/
+apps/api/node_modules/
+apps/widget/node_modules/
+packages/database/node_modules/
+packages/ai/node_modules/
+packages/rag/node_modules/
+packages/shared/node_modules/
+
+# Local Environment Variables and Credentials
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+
+# Build Outputs
+dist/
+/dist
+apps/widget/dist/
+packages/database/dist/
+packages/ai/dist/
+packages/rag/dist/
+packages/shared/dist/
+apps/api/dist/
+
+# Next.js Build Outputs
+.next/
+apps/admin/.next/
+out/
+
+# TypeScript Build Info
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+node_modules/.tmp/
+
+# OS/System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log

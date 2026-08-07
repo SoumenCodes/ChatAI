@@ -362,9 +362,9 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
             <Button 
               variant="ghost" 
               onClick={handleDeleteProject}
-              className="text-red-500 hover:bg-red-50 hover:text-red-600 gap-1.5 font-medium text-xs h-9"
+              className="text-red-500 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/20 dark:hover:text-red-400 gap-1.5 font-semibold text-xs h-9"
             >
-              <Trash2 className="h-4 w-4" />
+              <Trash2 className="h-4 w-4 text-red-500" />
               Delete Project
             </Button>
           </div>
@@ -831,41 +831,6 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
                           </div>
                         </div>
 
-                        <hr className="border-t border-slate-100" />
-                        
-                        <div className="grid md:grid-cols-2 gap-6 pt-2">
-                          {/* Custom API Key */}
-                          <div className="space-y-2">
-                            <Label htmlFor="customApiKey" className="text-slate-800 font-bold text-xs">Custom Gemini API Key (Optional)</Label>
-                            <p className="text-[11px] text-slate-400">If set, billing will be charged to this key instead of our platform default.</p>
-                            <Input
-                              id="customApiKey"
-                              type="password"
-                              placeholder="AIzaSy..."
-                              value={customApiKey}
-                              onChange={(e) => setCustomApiKey(e.target.value)}
-                              className="focus-visible:ring-indigo-600 h-10 text-xs"
-                            />
-                          </div>
-
-                          {/* Custom Model */}
-                          <div className="space-y-2">
-                            <Label htmlFor="customModel" className="text-slate-800 font-bold text-xs">Text Generation Model</Label>
-                            <p className="text-[11px] text-slate-400">Select the model family used for widget streaming.</p>
-                            <select
-                              id="customModel"
-                              value={customModel}
-                              onChange={(e) => setCustomModel(e.target.value)}
-                              className="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-xs ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
-                            >
-                              <option value="gemini-flash-latest">Gemini 2.5 Flash (Recommended)</option>
-                              <option value="gemini-2.5-pro">Gemini 2.5 Pro (Higher Quality)</option>
-                              <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
-                              <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
-                            </select>
-                          </div>
-                        </div>
-
                       </CardContent>
                       <CardFooter className="bg-slate-50 border-t border-slate-100 p-4 justify-end rounded-b-lg">
                         <Button 
@@ -878,8 +843,9 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
                     </Card>
                   </div>
 
-                  {/* Domain guardrails */}
+                  {/* Right side configuration panels */}
                   <div className="space-y-6">
+                    {/* Domain guardrails */}
                     <Card className="border border-slate-200 bg-white shadow-sm">
                       <CardHeader className="pb-3 border-b border-slate-100">
                         <CardTitle className="text-base font-bold text-slate-800 flex items-center gap-1.5">
@@ -916,6 +882,49 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
                               </div>
                             ))}
                           </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {/* Gemini Configuration Card */}
+                    <Card className="border border-slate-200 bg-white shadow-sm">
+                      <CardHeader className="pb-3 border-b border-slate-100">
+                        <CardTitle className="text-base font-bold text-slate-800 flex items-center gap-1.5">
+                          <Bot className="h-4.5 w-4.5 text-indigo-600" />
+                          Gemini Configuration
+                        </CardTitle>
+                        <CardDescription>Configure dynamic billing credentials and model versions.</CardDescription>
+                      </CardHeader>
+                      <CardContent className="pt-6 space-y-4">
+                        {/* Custom API Key */}
+                        <div className="space-y-2">
+                          <Label htmlFor="customApiKey" className="text-slate-800 font-bold text-xs">Custom Gemini API Key (Optional)</Label>
+                          <p className="text-[10px] text-slate-400">If set, billing will be charged to this key instead of our platform default.</p>
+                          <Input
+                            id="customApiKey"
+                            type="password"
+                            placeholder="AIzaSy..."
+                            value={customApiKey}
+                            onChange={(e) => setCustomApiKey(e.target.value)}
+                            className="focus-visible:ring-indigo-600 h-9 text-xs"
+                          />
+                        </div>
+
+                        {/* Custom Model */}
+                        <div className="space-y-2">
+                          <Label htmlFor="customModel" className="text-slate-800 font-bold text-xs">Text Generation Model</Label>
+                          <p className="text-[10px] text-slate-400">Select the model family used for widget streaming.</p>
+                          <select
+                            id="customModel"
+                            value={customModel}
+                            onChange={(e) => setCustomModel(e.target.value)}
+                            className="flex h-9 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-xs ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
+                          >
+                            <option value="gemini-flash-latest">Gemini 2.5 Flash (Recommended)</option>
+                            <option value="gemini-2.5-pro">Gemini 2.5 Pro (Higher Quality)</option>
+                            <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                            <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+                          </select>
                         </div>
                       </CardContent>
                     </Card>
@@ -989,15 +998,15 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
                   </div>
 
                   <div className="space-y-6">
-                    <Card className="border border-slate-200 bg-emerald-50/50 ring-1 ring-emerald-500/10 shadow-sm">
+                    <Card className="border border-slate-200 dark:border-emerald-900/30 bg-emerald-50/50 dark:bg-emerald-950/20 ring-1 ring-emerald-500/10 dark:ring-emerald-500/20 shadow-sm">
                       <CardHeader className="pb-2">
-                        <div className="flex items-center gap-1.5 text-emerald-800">
-                          <ShieldCheck className="h-5 w-5 text-emerald-600" />
+                        <div className="flex items-center gap-1.5 text-emerald-800 dark:text-emerald-300">
+                          <ShieldCheck className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
                           <CardTitle className="text-sm font-bold">Integration Status</CardTitle>
                         </div>
                       </CardHeader>
                       <CardContent>
-                        <p className="text-xs text-emerald-700 leading-relaxed font-medium">
+                        <p className="text-xs text-emerald-700 dark:text-emerald-400/90 leading-relaxed font-medium">
                           The script is ready. Once embedded, the widget will load and automatically inherit your customized settings, styling tokens, and knowledge base.
                         </p>
                       </CardContent>

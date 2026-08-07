@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -11,7 +12,9 @@ import {
   Key,
   CreditCard,
   LogOut,
-  Bot
+  Bot,
+  Sun,
+  Moon
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -21,6 +24,30 @@ interface SidebarProps {
 
 export function Sidebar({ currentProjectId }: SidebarProps) {
   const pathname = usePathname();
+  const [isDarkMode, setIsDarkMode] = useState(true);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    const shouldBeDark = savedTheme !== "light";
+    setIsDarkMode(shouldBeDark);
+    if (shouldBeDark) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const nextTheme = !isDarkMode;
+    setIsDarkMode(nextTheme);
+    if (nextTheme) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  };
 
   const mainNav = [
     { name: "Overview", href: "/", icon: LayoutDashboard },
@@ -39,7 +66,7 @@ export function Sidebar({ currentProjectId }: SidebarProps) {
   return (
     <div className="flex h-screen w-64 flex-col bg-slate-900 text-white border-r border-slate-800">
       {/* Logo Area */}
-      <div className="flex h-16 items-center gap-2 px-6 border-b border-slate-800">
+      <Link href="/" className="flex h-16 items-center gap-2 px-6 border-b border-slate-800 hover:bg-slate-800/20 transition-colors cursor-pointer">
         <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-600">
           <Bot className="h-5 w-5 text-white" />
         </div>
@@ -47,7 +74,7 @@ export function Sidebar({ currentProjectId }: SidebarProps) {
           <h1 className="font-bold text-sm leading-tight">SoumenWidget</h1>
           <span className="text-[10px] text-slate-400 font-medium">AI PLATFORM</span>
         </div>
-      </div>
+      </Link>
 
       {/* Nav Content */}
       <div className="flex flex-1 flex-col justify-between overflow-y-auto px-4 py-6">
@@ -99,6 +126,30 @@ export function Sidebar({ currentProjectId }: SidebarProps) {
             ))}
           </nav>
         </div>
+
+        {/* Theme Toggle at Bottom */}
+        <div className="mt-6 border-t border-slate-800 pt-4">
+          <button
+            onClick={toggleTheme}
+            className="flex w-full items-center justify-between rounded-lg bg-slate-800/50 hover:bg-slate-800 hover:text-slate-100 px-3 py-2 text-sm font-medium transition-all duration-200 text-slate-300"
+          >
+            <div className="flex items-center gap-3">
+              {isDarkMode ? (
+                <>
+                  <Moon className="h-4.5 w-4.5 text-yellow-400 fill-yellow-400/20" />
+                  <span>Dark Mode</span>
+                </>
+              ) : (
+                <>
+                  <Sun className="h-4.5 w-4.5 text-amber-500" />
+                  <span>Light Mode</span>
+                </>
+              )}
+            </div>
+            <div className="h-2 w-2 rounded-full bg-emerald-500"></div>
+          </button>
+        </div>
+
       </div>
     </div>
   );

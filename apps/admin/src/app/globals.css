@@ -128,3 +128,170 @@
     @apply font-sans;
   }
 }
+
+/* Dark Mode overrides for hardcoded light classes, turning it dark like shadcn site */
+.dark body {
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+}
+
+.dark .bg-slate-50,
+.dark .bg-slate-100\/50 {
+  background-color: var(--background) !important;
+}
+
+.dark .bg-white {
+  background-color: var(--card) !important;
+}
+
+.dark .bg-slate-50\/50,
+.dark .bg-slate-50\/50\/50 {
+  background-color: oklch(0.18 0 0) !important;
+}
+
+.dark .text-slate-900,
+.dark .text-slate-800,
+.dark .text-slate-700,
+.dark .text-slate-800\/90 {
+  color: var(--foreground) !important;
+}
+
+.dark .text-slate-600 {
+  color: oklch(0.985 0 0 / 75%) !important;
+}
+
+.dark .text-slate-500,
+.dark .text-slate-400 {
+  color: var(--muted-foreground) !important;
+}
+
+.dark .border-slate-200,
+.dark .border-slate-100 {
+  border-color: var(--border) !important;
+}
+
+.dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--border) !important;
+}
+
+.dark .hover\:bg-slate-50:hover,
+.dark .hover\:bg-slate-50\/50:hover {
+  background-color: oklch(0.269 0 0 / 30%) !important;
+}
+
+.dark .hover\:bg-slate-100:hover {
+  background-color: oklch(0.269 0 0 / 60%) !important;
+}
+
+.dark header {
+  background-color: var(--card) !important;
+  border-bottom-color: var(--border) !important;
+}
+
+.dark input,
+.dark textarea,
+.dark select {
+  background-color: oklch(0.145 0 0) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: oklch(0.985 0 0 / 40%) !important;
+}
+
+.dark .bg-indigo-50 {
+  background-color: oklch(0.269 0 0 / 40%) !important;
+  color: oklch(0.65 0.15 250) !important;
+}
+
+.dark .text-indigo-600 {
+  color: oklch(0.65 0.15 250) !important;
+}
+
+.dark .text-indigo-700 {
+  color: oklch(0.7 0.12 250) !important;
+}
+
+.dark .bg-indigo-100 {
+  background-color: oklch(0.269 0 0 / 45%) !important;
+}
+
+.dark .bg-indigo-600 {
+  background-color: oklch(0.488 0.243 264.376) !important;
+}
+
+.dark .bg-indigo-600:hover {
+  background-color: oklch(0.42 0.22 264) !important;
+}
+
+.dark .border-indigo-100 {
+  border-color: oklch(1 0 0 / 10%) !important;
+}
+
+.dark .bg-slate-900 {
+  background-color: oklch(0.1 0 0) !important;
+}
+
+.dark .border-slate-800 {
+  border-color: oklch(1 0 0 / 8%) !important;
+}
+
+/* Chat bubble adjustments in dark mode */
+.dark .bg-indigo-50\/50 {
+  background-color: oklch(0.22 0 0) !important;
+}
+.dark .text-indigo-900 {
+  color: oklch(0.95 0 0) !important;
+}
+.dark .text-indigo-800 {
+  color: oklch(0.9 0 0) !important;
+}
+.dark .bg-indigo-50\/10 {
+  background-color: oklch(1 0 0 / 5%) !important;
+}
+
+/* Tabs customization in dark mode */
+.dark .bg-slate-100\/80 {
+  background-color: oklch(0.12 0 0) !important;
+  border-color: oklch(1 0 0 / 10%) !important;
+}
+
+.dark button[data-state="active"],
+.dark [data-state="active"] {
+  background-color: oklch(0.22 0 0) !important;
+  color: oklch(0.985 0 0) !important;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 40%) !important;
+  border-color: oklch(1 0 0 / 15%) !important;
+}
+
+.dark button[data-state="inactive"],
+.dark [data-state="inactive"],
+.dark button:not([data-state="active"]) {
+  color: oklch(0.985 0 0 / 50%) !important;
+}
+
+.dark button[data-state="active"]:hover {
+  background-color: oklch(0.22 0 0) !important;
+}
+
+.dark button[data-state="inactive"]:hover,
+.dark button:not([data-state="active"]):hover {
+  color: oklch(0.985 0 0) !important;
+}
+
+/* Force pointer cursor on all interactive elements */
+a,
+button,
+select,
+input[type="submit"],
+input[type="button"],
+input[type="checkbox"],
+input[type="radio"],
+[role="button"],
+[data-state="active"],
+[data-state="inactive"],
+.cursor-pointer {
+  cursor: pointer !important;
+}

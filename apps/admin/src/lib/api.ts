@@ -36,6 +36,8 @@ export async function updateProjectSettings(
     similarityThreshold: number;
     maxSources: number;
     fallbackMessage: string;
+    customApiKey?: string | null;
+    customModel?: string | null;
   }
 ): Promise<DashboardProject> {
   const res = await fetch(`${API_URL}/projects/${id}`, {

@@ -46,7 +46,7 @@ const upload = multer({
 
 // Create Project
 app.post("/projects", async (req, res) => {
-  const { name, systemPrompt, similarityThreshold, maxSources, fallbackMessage } = req.body;
+  const { name, systemPrompt, similarityThreshold, maxSources, fallbackMessage, customApiKey, customModel } = req.body;
   
   if (!name) {
     return res.status(400).json({ error: "Project name is required" });
@@ -65,6 +65,8 @@ app.post("/projects", async (req, res) => {
       similarityThreshold: similarityThreshold !== undefined ? Number(similarityThreshold) : undefined,
       maxSources: maxSources !== undefined ? Number(maxSources) : undefined,
       fallbackMessage: fallbackMessage || undefined,
+      customApiKey: customApiKey || undefined,
+      customModel: customModel || undefined,
     }).returning();
 
     res.status(201).json(newProject[0]);
@@ -144,14 +146,16 @@ app.get("/projects/:id", async (req, res) => {
 // Update Project Settings
 app.put("/projects/:id", async (req, res) => {
   const { id } = req.params;
-  const { name, systemPrompt, similarityThreshold, maxSources, fallbackMessage } = req.body;
+  const { name, systemPrompt, similarityThreshold, maxSources, fallbackMessage, customApiKey, customModel } = req.body;
   try {
     const updated = await db.update(projects).set({
       name,
       systemPrompt,
       similarityThreshold: similarityThreshold !== undefined ? Number(similarityThreshold) : undefined,
       maxSources: maxSources !== undefined ? Number(maxSources) : undefined,
-      fallbackMessage
+      fallbackMessage,
+      customApiKey: customApiKey !== undefined ? customApiKey : undefined,
+      customModel: customModel !== undefined ? customModel : undefined,
     }).where(eq(projects.id, id)).returning();
 
     res.json(updated[0]);
@@ -174,10 +178,6 @@ app.post("/documents/upload", upload.single("file"), async (req, res) => {
     return res.status(400).json({ error: "ProjectId and File are required" });
   }
 
-  if (!aiProvider) {
-    return res.status(503).json({ error: "AI Provider is not configured (missing Gemini API Key)" });
-  }
-
   // Create temporary document record
   const docId = crypto.randomUUID();
   const fileName = file.originalname;
@@ -187,6 +187,21 @@ app.post("/documents/upload", upload.single("file"), async (req, res) => {
     const proj = await db.select().from(projects).where(eq(projects.id, projectId)).limit(1);
     if (proj.length === 0) {
       return res.status(404).json({ error: "Project not found" });
+    }
+    const projectConfig = proj[0];
+
+    // Determine AI Client instance to use (global vs project custom key)
+    let dynamicAiProvider = aiProvider;
+    if (projectConfig.customApiKey) {
+      try {
+        dynamicAiProvider = new GeminiProvider(projectConfig.customApiKey);
+      } catch (e) {
+        console.warn("Failed to instantiate dynamic AI Provider with custom Key. Falling back to default.");
+      }
+    }
+
+    if (!dynamicAiProvider) {
+      return res.status(503).json({ error: "AI Provider is not configured" });
     }
 
     // 2. Write document record as processing
@@ -214,9 +229,8 @@ app.post("/documents/upload", upload.single("file"), async (req, res) => {
     }
 
     // 5. Generate embeddings and save to database
-    // We execute sequentially or in small batches to avoid rate limit locks
     for (const chunkItem of textChunks) {
-      const embedding = await aiProvider.generateEmbedding(chunkItem);
+      const embedding = await dynamicAiProvider.generateEmbedding(chunkItem);
       
       await db.insert(chunks).values({
         documentId: docId,
@@ -247,10 +261,6 @@ app.post("/documents/paste", async (req, res) => {
     return res.status(400).json({ error: "ProjectId, title, and content are required" });
   }
 
-  if (!aiProvider) {
-    return res.status(503).json({ error: "AI Provider is not configured (missing Gemini API Key)" });
-  }
-
   const docId = crypto.randomUUID();
   const fileName = `${title}.txt`;
 
@@ -258,6 +268,21 @@ app.post("/documents/paste", async (req, res) => {
     const proj = await db.select().from(projects).where(eq(projects.id, projectId)).limit(1);
     if (proj.length === 0) {
       return res.status(404).json({ error: "Project not found" });
+    }
+    const projectConfig = proj[0];
+
+    // Determine AI Client instance to use
+    let dynamicAiProvider = aiProvider;
+    if (projectConfig.customApiKey) {
+      try {
+        dynamicAiProvider = new GeminiProvider(projectConfig.customApiKey);
+      } catch (e) {
+        console.warn("Failed to instantiate dynamic AI Provider with custom Key. Falling back to default.");
+      }
+    }
+
+    if (!dynamicAiProvider) {
+      return res.status(503).json({ error: "AI Provider is not configured" });
     }
 
     await db.insert(documents).values({
@@ -271,7 +296,7 @@ app.post("/documents/paste", async (req, res) => {
     const textChunks = chunkText(content, 500, 100);
 
     for (const chunkItem of textChunks) {
-      const embedding = await aiProvider.generateEmbedding(chunkItem);
+      const embedding = await dynamicAiProvider.generateEmbedding(chunkItem);
       
       await db.insert(chunks).values({
         documentId: docId,
@@ -315,10 +340,6 @@ app.post("/chat", async (req, res) => {
     return res.status(400).json({ error: "ProjectId and message are required" });
   }
 
-  if (!aiProvider) {
-    return res.status(503).json({ error: "AI Provider is not configured (missing Gemini API Key)" });
-  }
-
   // Set SSE Headers
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
@@ -333,8 +354,23 @@ app.post("/chat", async (req, res) => {
     }
     const projectConfig = projList[0];
 
+    // Determine dynamic AI client
+    let dynamicAiProvider = aiProvider;
+    if (projectConfig.customApiKey) {
+      try {
+        dynamicAiProvider = new GeminiProvider(projectConfig.customApiKey);
+      } catch (e) {
+        console.warn("Failed to instantiate dynamic AI Provider with custom Key. Falling back to default.");
+      }
+    }
+
+    if (!dynamicAiProvider) {
+      res.write(`data: ${JSON.stringify({ error: "AI Provider is not configured" })}\n\n`);
+      return res.end();
+    }
+
     // 2. Generate Query Embedding
-    const queryEmbedding = await aiProvider.generateEmbedding(message);
+    const queryEmbedding = await dynamicAiProvider.generateEmbedding(message);
     const vectorString = `[${queryEmbedding.join(",")}]`;
 
     // 3. Query pgvector matching chunks (Cosine Distance operator: <=>)
@@ -433,13 +469,14 @@ app.post("/chat", async (req, res) => {
 
     // 7. Stream content from Gemini
     let fullResponse = "";
-    await aiProvider.generateTextStream(
+    await dynamicAiProvider.generateTextStream(
       userPrompt,
       systemPromptInstruction,
       (textChunk) => {
         fullResponse += textChunk;
         res.write(`data: ${JSON.stringify({ text: textChunk })}\n\n`);
-      }
+      },
+      projectConfig.customModel || undefined
     );
 
     // 8. Compile Sources Citation

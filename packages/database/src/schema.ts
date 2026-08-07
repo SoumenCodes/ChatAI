@@ -29,6 +29,8 @@ export const projects = pgTable("projects", {
   fallbackMessage: text("fallback_message")
     .notNull()
     .default("This question does not belong to My Work"),
+  customApiKey: text("custom_api_key"),
+  customModel: text("custom_model"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 

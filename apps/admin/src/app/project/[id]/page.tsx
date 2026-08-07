@@ -60,6 +60,8 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
   const [fallbackMessage, setFallbackMessage] = useState("");
   const [similarityThreshold, setSimilarityThreshold] = useState(0.45);
   const [maxSources, setMaxSources] = useState(3);
+  const [customApiKey, setCustomApiKey] = useState("");
+  const [customModel, setCustomModel] = useState("gemini-flash-latest");
   const [allowedDomains, setAllowedDomains] = useState<string[]>([]);
   const [newDomain, setNewDomain] = useState("");
 
@@ -89,6 +91,8 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
         setFallbackMessage(data.fallbackMessage);
         setSimilarityThreshold(data.similarityThreshold);
         setMaxSources(data.maxSources);
+        setCustomApiKey(data.customApiKey || "");
+        setCustomModel(data.customModel || "gemini-flash-latest");
         setAllowedDomains(["http://localhost:3000"]); // Mock domain list
 
         // Initial welcome message
@@ -122,7 +126,9 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
       systemPrompt,
       fallbackMessage,
       similarityThreshold,
-      maxSources
+      maxSources,
+      customApiKey: customApiKey.trim() || null,
+      customModel: customModel || null
     })
       .then((data) => {
         setProject(data);
@@ -821,6 +827,41 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
                               <option value={2}>2 Sources</option>
                               <option value={3}>3 Sources (Recommended)</option>
                               <option value={5}>5 Sources</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <hr className="border-t border-slate-100" />
+                        
+                        <div className="grid md:grid-cols-2 gap-6 pt-2">
+                          {/* Custom API Key */}
+                          <div className="space-y-2">
+                            <Label htmlFor="customApiKey" className="text-slate-800 font-bold text-xs">Custom Gemini API Key (Optional)</Label>
+                            <p className="text-[11px] text-slate-400">If set, billing will be charged to this key instead of our platform default.</p>
+                            <Input
+                              id="customApiKey"
+                              type="password"
+                              placeholder="AIzaSy..."
+                              value={customApiKey}
+                              onChange={(e) => setCustomApiKey(e.target.value)}
+                              className="focus-visible:ring-indigo-600 h-10 text-xs"
+                            />
+                          </div>
+
+                          {/* Custom Model */}
+                          <div className="space-y-2">
+                            <Label htmlFor="customModel" className="text-slate-800 font-bold text-xs">Text Generation Model</Label>
+                            <p className="text-[11px] text-slate-400">Select the model family used for widget streaming.</p>
+                            <select
+                              id="customModel"
+                              value={customModel}
+                              onChange={(e) => setCustomModel(e.target.value)}
+                              className="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-xs ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600"
+                            >
+                              <option value="gemini-flash-latest">Gemini 2.5 Flash (Recommended)</option>
+                              <option value="gemini-2.5-pro">Gemini 2.5 Pro (Higher Quality)</option>
+                              <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                              <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
                             </select>
                           </div>
                         </div>

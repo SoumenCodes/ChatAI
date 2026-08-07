@@ -1,11 +1,12 @@
 import { GoogleGenAI } from "@google/genai";
 
 export interface AIProvider {
-  generateText(prompt: string, systemPrompt?: string): Promise<string>;
+  generateText(prompt: string, systemPrompt?: string, model?: string): Promise<string>;
   generateTextStream(
     prompt: string,
     systemPrompt: string,
-    onChunk: (text: string) => void
+    onChunk: (text: string) => void,
+    model?: string
   ): Promise<string>;
   generateEmbedding(text: string): Promise<number[]>;
 }
@@ -21,10 +22,9 @@ export class GeminiProvider implements AIProvider {
     this.ai = new GoogleGenAI({ apiKey: key });
   }
 
-  async generateText(prompt: string, systemPrompt?: string): Promise<string> {
+  async generateText(prompt: string, systemPrompt?: string, model?: string): Promise<string> {
     const response = await this.ai.models.generateContent({
-      // model: "gemini-flash-latest",
-     model: "gemini-flash-latest",
+      model: model || "gemini-flash-latest",
       contents: prompt,
       config: systemPrompt ? { systemInstruction: systemPrompt } : undefined,
     });
@@ -34,11 +34,11 @@ export class GeminiProvider implements AIProvider {
   async generateTextStream(
     prompt: string,
     systemPrompt: string,
-    onChunk: (text: string) => void
+    onChunk: (text: string) => void,
+    model?: string
   ): Promise<string> {
     const responseStream = await this.ai.models.generateContentStream({
-      // model: "gemini-flash-latest",
-     model: "gemini-flash-latest",
+      model: model || "gemini-flash-latest",
       contents: prompt,
       config: { systemInstruction: systemPrompt },
     });

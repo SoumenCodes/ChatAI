@@ -5,6 +5,8 @@ export interface Project {
   similarityThreshold: number;
   maxSources: number;
   fallbackMessage: string;
+  customApiKey?: string | null;
+  customModel?: string | null;
   createdAt: Date;
 }
 

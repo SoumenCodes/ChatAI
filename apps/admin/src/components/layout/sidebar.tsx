@@ -72,7 +72,7 @@ export function Sidebar({ currentProjectId }: SidebarProps) {
         </div>
         <div>
           <h1 className="font-bold text-sm leading-tight">SoumenWidget</h1>
-          <span className="text-[10px] text-slate-400 font-medium">AI PLATFORM</span>
+          <span className="text-[10px] text-slate-400 font-medium">RAG Chat Platform</span>
         </div>
       </Link>
 

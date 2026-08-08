@@ -12,7 +12,8 @@ import {
   Folder, 
   FileText,
   Calendar,
-  ChevronRight
+  ChevronRight,
+  Menu
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
@@ -25,6 +26,7 @@ export default function ProjectsPage() {
   const [newProjectName, setNewProjectName] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Load projects from API on mount
   useEffect(() => {
@@ -60,14 +62,22 @@ export default function ProjectsPage() {
   return (
     <div className="flex h-screen bg-slate-50 overflow-hidden font-sans">
       {/* Sidebar Layout */}
-      <Sidebar />
+      <Sidebar isMobileOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
 
       {/* Main Content Area */}
       <div className="flex flex-1 flex-col overflow-y-auto">
         {/* Header bar */}
-        <header className="flex h-16 items-center justify-between border-b border-slate-200 bg-white px-8">
-          <div className="text-sm font-medium text-slate-500">
-            Projects / Overview
+        <header className="flex h-16 items-center justify-between border-b border-slate-200 bg-white px-4 md:px-8">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="md:hidden p-2 -ml-1 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+            <div className="text-sm font-medium text-slate-500">
+              Projects / Overview
+            </div>
           </div>
           <div className="flex items-center gap-3">
             <span className="text-sm font-semibold text-slate-700">Soumen</span>
@@ -79,7 +89,7 @@ export default function ProjectsPage() {
         </header>
 
         {/* Core Layout Page Content */}
-        <main className="p-8 max-w-7xl w-full mx-auto space-y-6">
+        <main className="p-4 md:p-8 max-w-7xl w-full mx-auto space-y-6">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight font-heading">Projects</h2>
